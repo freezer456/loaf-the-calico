@@ -1,0 +1,143 @@
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+  <meta charset="UTF-8">  
+  <link href="https://fonts.googleapis.com/css2?family=Comic+Neue&display=swap" rel="stylesheet">  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+  <title>Loaf's Site</title>  
+  <style>  
+    body {  
+      color: white;  
+      font-family: "Comic Neue", "Comic Sans MS", Arial, sans-serif;  
+      background-color: coral;  
+    }  
+    .container {  
+      background-color: orange;  
+      padding: 20px;  
+      border-radius: 20px;  
+      margin-top: 30px;  
+    }  
+    .sub, .view {  
+      color: white;  
+      background-color: red;  
+      font-family: "Comic Neue", "Comic Sans MS", Arial, sans-serif;  
+      border: none;  
+      padding: 10px;  
+      border-radius: 20px;  
+      cursor: pointer;  
+    }  
+    .pfp {  
+      border-radius: 50%;  
+      width: 50px;  
+      height: 50px;  
+    }  
+    .view {  
+      background-color: lime !important;  
+    }  
+    .stick {  
+      position: sticky;  
+      top: 0;  
+      background-color: coral;  
+      padding: 10px 0;  
+      z-index: 1000;  
+    }  
+    select {  
+      font-family: "Comic Neue", "Comic Sans MS", Arial, sans-serif;  
+      padding: 8px;  
+      border-radius: 10px;  
+      border: none;  
+      background-color: white;  
+      color: black;  
+      margin-left: 10px;  
+    }  
+    #timer {  
+      font-size: 16px;  
+      margin-top: 10px;  
+    }
+    img {
+      width: 310px;
+      height: auto;
+      border-radius: 20px;
+    }  
+  </style>  
+</head>  
+<body>  
+  <h1 class="stick"><b>Loaf's Site (≈^·-·^≈)</b></h1>    <div class="stick">  
+    <label for="sectionSelect"><b>Jump to section:</b></label>  
+    <select id="sectionSelect" onchange="jumpToSection(this.value)">  
+      <option value="">-- Choose --</option>  
+      <option value="youtube">YouTube</option>  
+      <option value="catword">Cat Word of the Day</option>  
+      <option value="about">About</option>
+      <option value="playlists">Playlists</option>
+    </select>  
+  </div>    <div class="container" id="youtube">  
+    <h1>YouTube</h1>  
+    <img class="pfp" src="https://yt3.googleusercontent.com/QsZJkZEj-jN8mBu3gkX5A5D617Bg77uE-B89Ii8o-_SCQ45414ENuWnWGEQghRxZifg0gnEidA=s900-c-k-c0x00ffffff-no-rj" alt="Profile Picture">  
+    <h2>@loafthecalico</h2>  
+    <button class="sub" onclick="window.location.href='https://www.youtube.com/@loafthecalico?sub_confirmation=1'"><b>Subscribe on YouTube!</b></button>  
+    <button class="view" onclick="window.location.href='https://www.youtube.com/@loafthecalico'"><b>View</b></button>  
+  </div>    <div class="container" id="catword">  
+    <h1>Random Cat Word of the Day</h1>  
+    <h2 id="wordDisplay">Loading...</h2>  
+    <div id="timer">Loading time left...</div>  
+  </div>    <div class="container" id="about">  
+    <h1>About</h1>  
+    <p><b>  
+      Hello! I'm a Filipino creator who loves building things - games, websites, and more!<br>  
+      This site is all about my adventures with Loaf the cat and my YouTube channel.<br>  
+      I enjoy playing games like Geometry Dash, Minecraft, Roblox, and other fun stuff!<br>  
+    </b></p>  
+  </div> 
+  <div class="container" id="playlists">
+    <h1>Playlists</h1>
+    <a href="https://youtube.com/playlist?list=PLC4HfndOPfQbXMWIC6xwcl00tUjSGFMJD&si=HFow9F8HSHmc4Xm4" title="Minecraft Survival Series"><img src="https://i.ibb.co/5Xxk8c5r/Untitled290.png" alt="survival series"></a>
+    <p>Minecraft Survival Series</p>
+  </div>
+  <script>  
+    const catWords = [  
+      "Meowgical", "Purrfection", "Catnado", "Paw-sitive", "Whiskerful",  
+      "Furmidable", "Meowsterious", "Napzilla", "Clawtastic", "Loafer",  
+      "Cat-chy", "Furball", "Purrito", "Pounce", "Mewment", "Pawtastic",   
+      "Cat-astrophic", "Calico", "Tacocat"  
+    ];  
+  
+    const today = new Date().toDateString();  
+    const saved = JSON.parse(localStorage.getItem("catWordOfDay"));  
+    let word;  
+  
+    if (saved && saved.date === today) {  
+      word = saved.word;  
+    } else {  
+      word = catWords[Math.floor(Math.random() * catWords.length)];  
+      localStorage.setItem("catWordOfDay", JSON.stringify({ date: today, word }));  
+    }  
+  
+    document.getElementById("wordDisplay").textContent = word;  
+  
+    // Countdown timer until midnight  
+    function updateTimer() {  
+      const now = new Date();  
+      const nextMidnight = new Date();  
+      nextMidnight.setHours(24, 0, 0, 0); // Set to next midnight  
+      const diff = nextMidnight - now;  
+  
+      const hours = String(Math.floor(diff / 3600000)).padStart(2, '0');  
+      const minutes = String(Math.floor((diff % 3600000) / 60000)).padStart(2, '0');  
+      const seconds = String(Math.floor((diff % 60000) / 1000)).padStart(2, '0');  
+  
+      document.getElementById("timer").textContent = `New word in: ${hours}:${minutes}:${seconds}`;  
+    }  
+  
+    setInterval(updateTimer, 1000);  
+    updateTimer();  
+  
+    function jumpToSection(id) {  
+      if (id) {  
+        const el = document.getElementById(id);  
+        if (el) el.scrollIntoView({ behavior: "smooth" });  
+      }  
+    }  
+  </script>  
+</body>  
+</html>
